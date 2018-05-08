@@ -14,7 +14,7 @@ export default vo => `<!DOCTYPE html>
       ? '<link rel="stylesheet" type="text/css" href="' + vo.mainCSSBundle + '">'
       : ''}
 
-    <title>NYT Games Web Code Test</title>
+    <title>Control</title>
   </head>
 
   <body>

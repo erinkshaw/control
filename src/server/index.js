@@ -17,7 +17,7 @@ const server = app.listen(port, () => {
 
 const io = socketio(server)
 
-//if true  already can't join
+// if true  already can't join
 
 const uIds = {}
 
@@ -31,6 +31,13 @@ io.on('connection', socket => {
     console.log('unique ids', uIds)
   })
 
+  socket.on('joinGameRoom', uniqId => {
+    console.log('socket is joining with id ', uniqId)
+    uIds[uniqId] = true
+    console.log('unique ids', uIds)
+  })
+
+  // maybe set up some logic that the game state is saved so it can be rejoined?
   socket.on('disconnect', () => {
     console.log(':(')
   })
