@@ -22,20 +22,23 @@ const io = socketio(server)
 const uIds = {}
 
 io.on('connection', socket => {
-  console.log('Someone connected')
-  console.log(socket.id)
+  console.log(`${socket.id} connected`)
 
   socket.on('createGameRoom', uniqId => {
-    console.log('socket is subscribing with id ', uniqId)
-    uIds[uniqId] = false
-    console.log('unique ids', uIds)
+    console.log(`${socket.id} is initializing game with id ${uniqId} `)
+    uIds[uniqId] = [socket.id]
   })
 
+  // if not a valid game room id need to send response that client is waiting for, will dispatch action
   socket.on('joinGameRoom', uniqId => {
-    console.log('socket is joining with id ', uniqId)
-    uIds[uniqId] = true
-    console.log('unique ids', uIds)
-    socket.emit('startGame', uniqId)
+    if (uIds[uniqId]) {
+      console.log(`${socket.id} is joining game with id ${uniqId} `)
+      uIds[uniqId].push(socket.id)
+      io.sockets.emit('startGame', uniqId)
+      console.log(uIds)
+    } else {
+      socket.emit('invalidGame', uniqId)
+    }
   })
 
   // maybe set up some logic that the game state is saved so it can be rejoined?
