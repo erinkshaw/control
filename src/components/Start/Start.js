@@ -20,7 +20,6 @@ class Start extends Component {
   }
 
   render() {
-    console.log(this.state)
     const { gameId, showForm } = this.state
     if (gameId) {
       return (

@@ -7,8 +7,9 @@ const createGameRoom = gameId => {
 }
 
 const joinGameRoom = gameId => {
-  console.log(gameId)
   socket.emit('joinGameRoom', gameId)
 }
+
+socket.on('startGame', gameId => console.log(gameId))
 
 export { createGameRoom, joinGameRoom }

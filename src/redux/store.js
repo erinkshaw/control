@@ -4,9 +4,29 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
 const defaultState = {
-  playerOneHand: [],
-  playerTwoHand: [],
+  gameId: '',
 }
+
+const SET_GAME_ID = 'SET_GAME_ID'
+
+export const setGameId = gameId => ({ type: SET_GAME_ID, gameId })
+
+const reducer = (state = defaultState, action) => {
+  switch (action.type) {
+    case SET_GAME_ID: {
+      return { ...state, gameId: action.gameId }
+    }
+    default:
+      return state
+  }
+}
+
+const store = createStore(
+  reducer,
+  composeWithDevTools(applyMiddleware(thunk, createLogger({ collapsed: true })))
+)
+
+export default store
 
 // getDeck
 
@@ -34,20 +54,3 @@ const defaultState = {
 // cancelBronzeCard
 
 // installCard
-
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case SET_DECK: {
-      return { ...state, deck: action.deck }
-    }
-    default:
-      return state
-  }
-}
-
-const store = createStore(
-  reducer,
-  composeWithDevTools(applyMiddleware(thunk, createLogger({ collapsed: true })))
-)
-
-export default store

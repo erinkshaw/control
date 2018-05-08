@@ -1,9 +1,11 @@
 import React from 'react'
 import Main from '../Main/Main'
+import { Provider } from 'react-redux'
+import store from '../../redux/store'
 
 const App = () =>
-  <div>
+  <Provider store={store}>
     <Main />
-  </div>
+  </Provider>
 
 export default App

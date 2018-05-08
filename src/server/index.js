@@ -35,6 +35,7 @@ io.on('connection', socket => {
     console.log('socket is joining with id ', uniqId)
     uIds[uniqId] = true
     console.log('unique ids', uIds)
+    socket.emit('startGame', uniqId)
   })
 
   // maybe set up some logic that the game state is saved so it can be rejoined?
