@@ -3,6 +3,8 @@ import store, { startGame, setIdInvalid } from '../redux/store'
 
 // TODO: What does this need to be on deploy? The actual URL?
 
+// TODO: WHAT IF SUDDEN DEATH?
+
 const socket = openSocket('http://localhost:3000')
 
 const createGameRoom = gameId => {
