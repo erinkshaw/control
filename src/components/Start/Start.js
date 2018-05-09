@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { setGameId } from '../../redux/store'
+import { setGameId, setIdInvalid } from '../../redux/store'
 import Game from '../Game/Game'
 import styles from './Start.scss'
 
@@ -17,11 +17,19 @@ class Start extends Component {
     this.changeText = this.changeText.bind(this)
   }
 
+  // TODO: this doesn't work
+  componentDidMount() {
+    const { invalidId, resetInvalidId } = this.props
+    if (invalidId) {
+      alert('Game Id is invalid!')
+      resetInvalidId()
+    }
+  }
+
   render() {
     const { showForm } = this.state
     const { gameId, joinGame } = this.props
     if (gameId) {
-      // make a new component for the 'waiting room'
       return <Game />
     }
     if (showForm) {
@@ -49,12 +57,15 @@ class Start extends Component {
   }
 }
 
-const mapStateToProps = state => ({ gameId: state.gameId })
+const mapStateToProps = state => ({ gameId: state.gameId, invalidId: state.invalidId })
 
 const mapDispatchToProps = dispatch => ({
   joinGame(e, gameId = null) {
     e.preventDefault()
     dispatch(setGameId(gameId))
+  },
+  resetInvalidId() {
+    dispatch(setIdInvalid())
   },
 })
 

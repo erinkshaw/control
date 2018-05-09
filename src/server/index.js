@@ -6,6 +6,7 @@ import socketio from 'socket.io'
 import { renderToString } from 'react-dom/server'
 import App from '../components/App'
 import template from './template'
+import makeGame from '../scripts/cards'
 
 const clientAssets = require(KYT.ASSETS_MANIFEST) // eslint-disable-line import/no-dynamic-require
 const port = parseInt(KYT.SERVER_PORT, 10)
@@ -17,33 +18,35 @@ const server = app.listen(port, () => {
 
 const io = socketio(server)
 
-// if true  already can't join
-
 const uIds = {}
+const game = makeGame()
 
+// TODO: maybe set up some logic that the game state is saved so it can be rejoined?
 io.on('connection', socket => {
   console.log(`${socket.id} connected`)
 
+  // create game instance here
   socket.on('createGameRoom', uniqId => {
     console.log(`${socket.id} is initializing game with id ${uniqId} `)
     uIds[uniqId] = [socket.id]
+    console.log('this thar b the game', game)
   })
 
-  // if not a valid game room id need to send response that client is waiting for, will dispatch action
+  // add p2 to game instance here
   socket.on('joinGameRoom', uniqId => {
-    if (uIds[uniqId]) {
+    if (uIds[uniqId] && uIds[uniqId].length === 1) {
       console.log(`${socket.id} is joining game with id ${uniqId} `)
       uIds[uniqId].push(socket.id)
-      io.sockets.emit('startGame', uniqId)
+      io.sockets.emit('startGame', game)
       console.log(uIds)
     } else {
       socket.emit('invalidGame', uniqId)
     }
+    console.log(uIds)
   })
 
-  // maybe set up some logic that the game state is saved so it can be rejoined?
   socket.on('disconnect', () => {
-    console.log(':(')
+    console.log(`${socket.id} disconnected :(`)
   })
 })
 

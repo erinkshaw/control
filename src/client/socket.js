@@ -1,5 +1,7 @@
 import openSocket from 'socket.io-client'
-import store, { startGame } from '../redux/store'
+import store, { startGame, setIdInvalid } from '../redux/store'
+
+// TODO: What does this need to be on deploy? The actual URL?
 
 const socket = openSocket('http://localhost:3000')
 
@@ -11,10 +13,11 @@ const joinGameRoom = gameId => {
   socket.emit('joinGameRoom', gameId)
 }
 
-socket.on('startGame', () => {
-  store.dispatch(startGame())
+socket.on('startGame', game => {
+  console.log(game)
+  store.dispatch(startGame(game))
 })
 
-socket.on('invalidGame', () => console.log('haay invalid'))
+socket.on('invalidGame', () => store.dispatch(setIdInvalid()))
 
 export { createGameRoom, joinGameRoom }

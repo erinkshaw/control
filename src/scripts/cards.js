@@ -1,3 +1,5 @@
+import Game from './game'
+
 class Card {
   constructor(name, fuelCells, type, actions = [], imgUrl = '') {
     this.name = name
@@ -90,4 +92,17 @@ const makeDeck = () => {
   return deck.sort(shuffleDeck)
 }
 
-export default makeDeck
+const makeGame = () => {
+  const deck = makeDeck()
+  const p1Hand = []
+  const p2Hand = []
+
+  deck.splice(-10, 10).forEach((card, i) => {
+    if (i % 2 === 0) p1Hand.push(card)
+    else p2Hand.push(card)
+  })
+
+  return new Game(deck, p1Hand, p2Hand)
+}
+
+export default makeGame

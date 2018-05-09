@@ -8,11 +8,14 @@ import { createGameRoom, joinGameRoom } from '../client/socket'
 const defaultState = {
   gameId: '',
   gameStarted: false,
+  invalidId: false,
 }
 
 const SET_GAME_ID = 'SET_GAME_ID'
 
 const START_GAME = 'START_GAME'
+
+const INVALID_ID = 'INVALID_ID'
 
 export const startGame = () => ({ type: START_GAME })
 
@@ -23,7 +26,7 @@ export const setGameId = uniqId => {
   return { type: SET_GAME_ID, gameId }
 }
 
-export const resetGameId = () => ({})
+export const setIdInvalid = () => ({ type: INVALID_ID })
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
@@ -32,6 +35,9 @@ const reducer = (state = defaultState, action) => {
     }
     case START_GAME: {
       return { ...state, gameStarted: true }
+    }
+    case INVALID_ID: {
+      return { ...state, invalidId: !state.invalidId, gameId: '' }
     }
     default:
       return state
