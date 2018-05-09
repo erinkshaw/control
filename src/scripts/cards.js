@@ -1,4 +1,4 @@
-import Game from './game'
+import { Game } from './game'
 
 class Card {
   constructor(name, fuelCells, type, actions = [], imgUrl = '') {

@@ -13,9 +13,9 @@ const joinGameRoom = gameId => {
   socket.emit('joinGameRoom', gameId)
 }
 
-socket.on('startGame', game => {
-  console.log(game)
-  store.dispatch(startGame(game))
+socket.on('startGame', gameState => {
+  console.log(gameState)
+  store.dispatch(startGame(gameState))
 })
 
 socket.on('invalidGame', () => store.dispatch(setIdInvalid()))

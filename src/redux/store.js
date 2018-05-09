@@ -9,6 +9,11 @@ const defaultState = {
   gameId: '',
   gameStarted: false,
   invalidId: false,
+  playerHand: [],
+  playerInstalled: [],
+  opponentInstalled: [],
+  playersTurn: false,
+  topDiscard: {},
 }
 
 const SET_GAME_ID = 'SET_GAME_ID'
@@ -17,8 +22,26 @@ const START_GAME = 'START_GAME'
 
 const INVALID_ID = 'INVALID_ID'
 
-export const startGame = () => ({ type: START_GAME })
+export const startGame = gameState => {
+  const {
+    playerHand,
+    playerInstalled,
+    opponentInstalled,
+    opponentHandLength,
+    playersTurn,
+    topDiscard,
+  } = gameState
 
+  return {
+    type: START_GAME,
+    playerHand,
+    playerInstalled,
+    opponentInstalled,
+    opponentHandLength,
+    playersTurn,
+    topDiscard,
+  }
+}
 export const setGameId = uniqId => {
   const gameId = uniqId || uniqid()
   if (uniqId) joinGameRoom(gameId)
@@ -34,7 +57,16 @@ const reducer = (state = defaultState, action) => {
       return { ...state, gameId: action.gameId }
     }
     case START_GAME: {
-      return { ...state, gameStarted: true }
+      return {
+        ...state,
+        gameStarted: true,
+        playerHand: action.playerHand,
+        playerInstalled: action.playerInstalled,
+        opponentInstalled: action.opponentInstalled,
+        opponentHandLength: action.opponentHandLength,
+        playersTurn: action.playersTurn,
+        topDiscard: action.topDiscard,
+      }
     }
     case INVALID_ID: {
       return { ...state, invalidId: !state.invalidId, gameId: '' }
