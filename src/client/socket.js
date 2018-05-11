@@ -16,7 +16,6 @@ const joinGameRoom = gameId => {
 }
 
 socket.on('startGame', gameState => {
-  console.log(gameState)
   store.dispatch(startGame(gameState))
 })
 

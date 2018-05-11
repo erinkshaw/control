@@ -70,7 +70,6 @@ io.on('connection', socket => {
     } else {
       socket.emit('invalidGame', uniqId)
     }
-    console.log(uIds)
   })
 
   socket.on('disconnect', () => {

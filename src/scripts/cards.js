@@ -1,12 +1,11 @@
 import { Game } from './game'
 
 class Card {
-  constructor(name, fuelCells, type, actions = [], imgUrl = '') {
+  constructor(name, fuelCells, type, actions = []) {
     this.name = name
     this.fuelCells = fuelCells
     this.type = type
     this.actions = actions
-    this.imgUrl = imgUrl
   }
 }
 
