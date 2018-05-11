@@ -15,10 +15,14 @@ const joinGameRoom = gameId => {
   socket.emit('joinGameRoom', gameId)
 }
 
+const drawingCard = gameId => {
+  socket.emit('drawCard', gameId)
+}
+
 socket.on('startGame', gameState => {
   store.dispatch(startGame(gameState))
 })
 
 socket.on('invalidGame', () => store.dispatch(setIdInvalid()))
 
-export { createGameRoom, joinGameRoom }
+export { createGameRoom, joinGameRoom, drawingCard }

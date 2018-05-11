@@ -19,8 +19,7 @@ const server = app.listen(port, () => {
 
 const io = socketio(server)
 
-const uIds = {}
-const game = makeGame()
+const games = {}
 
 // TODO: maybe set up some logic that the game state is saved so it can be rejoined?
 io.on('connection', socket => {
@@ -29,13 +28,15 @@ io.on('connection', socket => {
   // create game instance here
   socket.on('createGameRoom', uniqId => {
     console.log(`${socket.id} is initializing game with id ${uniqId} `)
-    uIds[uniqId] = [socket.id]
+    games[uniqId] = { players: [socket.id] }
     socket.join(uniqId)
   })
 
   // add p2 to game instance here
   socket.on('joinGameRoom', uniqId => {
-    if (uIds[uniqId] && uIds[uniqId].length === 1) {
+    if (games[uniqId].players && games[uniqId].players.length === 1) {
+      games[uniqId].game = makeGame()
+      const { game } = games[uniqId]
       const playerOne = new GameState(
         game.p1Hand,
         game.p1Installed,
@@ -55,7 +56,7 @@ io.on('connection', socket => {
 
       console.log(`${socket.id} is joining game with id ${uniqId} `)
 
-      uIds[uniqId].push(socket.id)
+      games[uniqId].players.push(socket.id)
 
       // this creates game room
       socket.join(uniqId)
@@ -70,6 +71,15 @@ io.on('connection', socket => {
     } else {
       socket.emit('invalidGame', uniqId)
     }
+  })
+
+  socket.on('drawCard', uniqId => {
+    const game = games[uniqId].game
+    console.log(game.deck.length)
+    const newCard = games[uniqId].game.deck.pop()
+    const playerHand = games[uniqId].players[0] === socket.id ? 'p1Hand' : 'p2Hand'
+    games[uniqId].game[playerHand].push(newCard)
+    console.log(game.p1Hand, game.p2Hand, game.deck.length)
   })
 
   socket.on('disconnect', () => {

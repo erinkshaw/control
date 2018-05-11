@@ -3,7 +3,7 @@ import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import uniqid from 'uniqid'
-import { createGameRoom, joinGameRoom } from '../client/socket'
+import { createGameRoom, joinGameRoom, drawingCard } from '../client/socket'
 
 const defaultState = {
   gameId: '',
@@ -21,6 +21,8 @@ const SET_GAME_ID = 'SET_GAME_ID'
 const START_GAME = 'START_GAME'
 
 const INVALID_ID = 'INVALID_ID'
+
+const DRAW_CARD = 'DRAW_CARD'
 
 export const startGame = gameState => {
   const {
@@ -50,6 +52,10 @@ export const setGameId = uniqId => {
 }
 
 export const setIdInvalid = () => ({ type: INVALID_ID })
+
+export const drawCard = () => {
+  drawingCard(store.getState().gameId)
+}
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {

@@ -1,10 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { drawCard } from '../../redux/store'
 
 class Modal extends React.Component {
   render() {
+    const { type, show, onClose, drawFromDeck } = this.props
     // Render nothing if the "show" prop is false
-    if (!this.props.show) {
+    if (!show) {
       return null
     }
 
@@ -29,15 +32,27 @@ class Modal extends React.Component {
       padding: 30,
     }
 
-    return (
-      <div className="backdrop" style={backdropStyle}>
-        <div className="modal" style={modalStyle}>
-          <div className="footer">
-            <button onClick={this.props.onClose}>Close</button>
+    if (type === 'card') {
+      return (
+        <div className="backdrop" style={backdropStyle}>
+          <div className="modal" style={modalStyle}>
+            <div className="footer">
+              <button onClick={onClose}>Close</button>
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
+    if (type === 'deck') {
+      return (
+        <div className="backdrop" style={backdropStyle}>
+          <div className="modal" style={modalStyle}>
+            <button onClick={drawFromDeck}>Draw Card</button>
+            <button onClick={onClose}>Close</button>
+          </div>
+        </div>
+      )
+    }
   }
 }
 
@@ -46,4 +61,11 @@ Modal.propTypes = {
   show: PropTypes.bool,
 }
 
-export default Modal
+const mapDispatchToProps = dispatch => ({
+  drawFromDeck() {
+    dispatch(drawCard)
+  },
+})
+
+export default connect(null, mapDispatchToProps)(Modal)
+

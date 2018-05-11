@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import styles from './Game.scss'
 import InstalledCards from '../InstalledCards/InstalledCards'
 import Hand from '../Hand/Hand'
+import Deck from '../Deck/Deck'
 
 const Game = props => {
   const { gameId, gameStarted, opponentInstalled, playerInstalled, playerHand } = props
@@ -10,10 +11,7 @@ const Game = props => {
     return (
       <div>
         <InstalledCards opponentInstalled={opponentInstalled} />
-        <div>
-          <div>deck card(img) or null [] </div>
-          <img src="/img/cardBack.png" alt="card back" />
-        </div>
+        <Deck />
         <InstalledCards playerInstalled={playerInstalled} />
         <Hand playerHand={playerHand} />
       </div>
