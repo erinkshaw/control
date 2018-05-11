@@ -12,7 +12,7 @@ const Game = props => {
         <InstalledCards opponentInstalled={opponentInstalled} />
         <div>
           <div>deck card(img) or null [] </div>
-          <div>discardtop (img) or null []</div>
+          <img src="/img/cardBack.png" alt="card back" />
         </div>
         <InstalledCards playerInstalled={playerInstalled} />
         <Hand playerHand={playerHand} />

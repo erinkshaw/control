@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styles from './Card.scss'
+import Modal from '../Modal/Modal'
 
 const toCamelCase = str => {
   const cmlCase = str.split(' ')
@@ -12,8 +13,39 @@ const toCamelCase = str => {
   return cmlCase.join('')
 }
 
-const Card = props => {
-  const { card } = props
-  return <img alt={`${card.name}`} src={`/img/${toCamelCase(card.name)}.png`} />
+// const Card = props => {
+//   const { card } = props
+//   return <img alt={`${card.name}`} src={`/img/${toCamelCase(card.name)}.png`} />
+// }
+// export default Card
+
+class Card extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { isOpen: false }
+    this.toggleModal = this.toggleModal.bind(this)
+  }
+
+  toggleModal() {
+    this.setState({ isOpen: !this.state.isOpen })
+  }
+
+  render() {
+    const { card } = this.props
+    return (
+      <div>
+        <img
+          alt={`${card.name}`}
+          src={`/img/${toCamelCase(card.name)}.png`}
+          onClick={this.toggleModal}
+        />
+        <Modal show={this.state.isOpen} onClose={this.toggleModal}>
+          Some content for the modal
+        </Modal>
+      </div>
+    )
+  }
 }
+
 export default Card
