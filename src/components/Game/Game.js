@@ -6,10 +6,19 @@ import Hand from '../Hand/Hand'
 import Deck from '../Deck/Deck'
 
 const Game = props => {
-  const { gameId, gameStarted, opponentInstalled, playerInstalled, playerHand } = props
+  const {
+    gameId,
+    gameStarted,
+    opponentInstalled,
+    playerInstalled,
+    opponentHandLength,
+    playerHand,
+  } = props
+  console.log(opponentHandLength)
   if (gameStarted) {
     return (
       <div>
+        <Hand opponentHandLength={opponentHandLength} type={'opponent'} />
         <InstalledCards opponentInstalled={opponentInstalled} />
         <Deck />
         <InstalledCards playerInstalled={playerInstalled} />
@@ -21,9 +30,7 @@ const Game = props => {
   return (
     <div>
       <p>Waiting for player two to join...</p>
-      <h1>
-        {gameId}
-      </h1>
+      <h1>{gameId}</h1>
     </div>
   )
 }
@@ -33,6 +40,7 @@ const mapStateToProps = state => ({
   gameStarted: state.gameStarted,
   playerHand: state.playerHand,
   opponentInstalled: state.opponentInstalled,
+  opponentHandLength: state.opponentHandLength,
   playerInstalled: state.playerInstalled,
 })
 

@@ -7,7 +7,7 @@ import { renderToString } from 'react-dom/server'
 import App from '../components/App'
 import template from './template'
 import makeGame from '../scripts/cards'
-import { GameState, returnNewGameState } from '../scripts/game'
+import { returnNewGameState } from '../scripts/game'
 
 const clientAssets = require(KYT.ASSETS_MANIFEST) // eslint-disable-line import/no-dynamic-require
 const port = parseInt(KYT.SERVER_PORT, 10)
@@ -59,6 +59,7 @@ io.on('connection', socket => {
     }
   })
 
+  // TODO: card hand seems to be flip flopping
   socket.on('drawCard', uniqId => {
     const currentGame = games[uniqId]
     const newCard = currentGame.game.deck.pop()

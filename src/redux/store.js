@@ -12,6 +12,7 @@ const defaultState = {
   playerHand: [],
   playerInstalled: [],
   opponentInstalled: [],
+  opponentHandLength: 0,
   playersTurn: false,
   topDiscard: {},
 }
