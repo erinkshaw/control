@@ -79,6 +79,7 @@ io.on('connection', socket => {
     const newCard = games[uniqId].game.deck.pop()
     const playerHand = games[uniqId].players[0] === socket.id ? 'p1Hand' : 'p2Hand'
     games[uniqId].game[playerHand].push(newCard)
+    games[uniqId].game.p1Turn = !games[uniqId].game.p1Turn
     console.log(game.p1Hand, game.p2Hand, game.deck.length)
   })
 

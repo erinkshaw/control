@@ -40,7 +40,7 @@ class Card extends Component {
           src={`/img/${toCamelCase(card.name)}.png`}
           onClick={this.toggleModal}
         />
-        <Modal show={this.state.isOpen} onClose={this.toggleModal}>
+        <Modal show={this.state.isOpen} onClose={this.toggleModal} type={'card'}>
           Some content for the modal
         </Modal>
       </div>
