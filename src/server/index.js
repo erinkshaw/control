@@ -7,7 +7,7 @@ import { renderToString } from 'react-dom/server'
 import App from '../components/App'
 import template from './template'
 import makeGame from '../scripts/cards'
-import { Game, GameState } from '../scripts/game'
+import { GameState, returnNewGameState } from '../scripts/game'
 
 const clientAssets = require(KYT.ASSETS_MANIFEST) // eslint-disable-line import/no-dynamic-require
 const port = parseInt(KYT.SERVER_PORT, 10)
@@ -34,29 +34,15 @@ io.on('connection', socket => {
 
   // add p2 to game instance here
   socket.on('joinGameRoom', uniqId => {
-    if (games[uniqId].players && games[uniqId].players.length === 1) {
-      games[uniqId].game = makeGame()
-      const { game } = games[uniqId]
-      const playerOne = new GameState(
-        game.p1Hand,
-        game.p1Installed,
-        game.p2Installed,
-        game.p2Hand.length,
-        game.p1Turn,
-        game.discardPile.slice(-1)[0]
-      )
-      const playerTwo = new GameState(
-        game.p2Hand,
-        game.p2Installed,
-        game.p1Installed,
-        game.p1Hand.length,
-        !game.p1Turn,
-        game.discardPile.slice(-1)[0]
-      )
+    const currentGame = games[uniqId]
+    if (currentGame.players && currentGame.players.length === 1) {
+      currentGame.game = makeGame()
+
+      const { playerOne, playerTwo } = returnNewGameState(currentGame.game)
 
       console.log(`${socket.id} is joining game with id ${uniqId} `)
 
-      games[uniqId].players.push(socket.id)
+      currentGame.players.push(socket.id)
 
       // this creates game room
       socket.join(uniqId)
@@ -74,13 +60,20 @@ io.on('connection', socket => {
   })
 
   socket.on('drawCard', uniqId => {
-    const game = games[uniqId].game
-    console.log(game.deck.length)
-    const newCard = games[uniqId].game.deck.pop()
-    const playerHand = games[uniqId].players[0] === socket.id ? 'p1Hand' : 'p2Hand'
-    games[uniqId].game[playerHand].push(newCard)
-    games[uniqId].game.p1Turn = !games[uniqId].game.p1Turn
-    console.log(game.p1Hand, game.p2Hand, game.deck.length)
+    const currentGame = games[uniqId]
+    const newCard = currentGame.game.deck.pop()
+    const playerHand = currentGame.players[0] === socket.id ? 'p1Hand' : 'p2Hand'
+    currentGame.game[playerHand].push(newCard)
+    currentGame.game.p1Turn = !currentGame.game.p1Turn
+    const { playerOne, playerTwo } = returnNewGameState(currentGame.game)
+    const nextTurn = currentGame.game.p1Turn ? playerOne : playerTwo
+    const prevTurn = !currentGame.game.p1Turn ? playerOne : playerTwo
+
+    //emits to player who just finished turn
+    socket.to(uniqId).emit('nextTurn', prevTurn)
+
+    // emits to player whose turn it is
+    socket.emit('nextTurn', nextTurn)
   })
 
   socket.on('disconnect', () => {

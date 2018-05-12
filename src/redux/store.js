@@ -22,7 +22,7 @@ const START_GAME = 'START_GAME'
 
 const INVALID_ID = 'INVALID_ID'
 
-const DRAW_CARD = 'DRAW_CARD'
+const NEW_GAMESTATE = 'NEW_GAMESTATE'
 
 export const startGame = gameState => {
   const {
@@ -54,7 +54,28 @@ export const setGameId = uniqId => {
 export const setIdInvalid = () => ({ type: INVALID_ID })
 
 export const drawCard = () => {
-  drawingCard(store.getState().gameId)
+  drawingCard(store.getState().gameId) // eslint-disable-line no-use-before-define
+}
+
+export const setNewGameState = gameState => {
+  const {
+    playerHand,
+    playerInstalled,
+    opponentInstalled,
+    opponentHandLength,
+    playersTurn,
+    topDiscard,
+  } = gameState
+
+  return {
+    type: NEW_GAMESTATE,
+    playerHand,
+    playerInstalled,
+    opponentInstalled,
+    opponentHandLength,
+    playersTurn,
+    topDiscard,
+  }
 }
 
 const reducer = (state = defaultState, action) => {
@@ -76,6 +97,17 @@ const reducer = (state = defaultState, action) => {
     }
     case INVALID_ID: {
       return { ...state, invalidId: !state.invalidId, gameId: '' }
+    }
+    case NEW_GAMESTATE: {
+      return {
+        ...state,
+        playerHand: action.playerHand,
+        playerInstalled: action.playerInstalled,
+        opponentInstalled: action.opponentInstalled,
+        opponentHandLength: action.opponentHandLength,
+        playersTurn: action.playersTurn,
+        topDiscard: action.topDiscard,
+      }
     }
     default:
       return state

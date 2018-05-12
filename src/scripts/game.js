@@ -35,3 +35,23 @@ export class GameState {
     this.topDiscard = topDiscard
   }
 }
+
+export const returnNewGameState = game => {
+  const playerOne = new GameState(
+    game.p1Hand,
+    game.p1Installed,
+    game.p2Installed,
+    game.p2Hand.length,
+    game.p1Turn,
+    game.discardPile.slice(-1)[0]
+  )
+  const playerTwo = new GameState(
+    game.p2Hand,
+    game.p2Installed,
+    game.p1Installed,
+    game.p1Hand.length,
+    !game.p1Turn,
+    game.discardPile.slice(-1)[0]
+  )
+  return { playerOne, playerTwo }
+}
