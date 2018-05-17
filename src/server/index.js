@@ -59,7 +59,7 @@ io.on('connection', socket => {
     }
   })
 
-  // TODO: card hand seems to be flip flopping
+  // TODO: card hand seems to be flip flopping (actually this is because of the logic that flips the turn each time)
   socket.on('drawCard', uniqId => {
     const currentGame = games[uniqId]
     const newCard = currentGame.game.deck.pop()

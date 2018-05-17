@@ -5,7 +5,7 @@ import { drawCard } from '../../redux/store'
 
 class Modal extends React.Component {
   render() {
-    const { type, show, onClose, drawFromDeck } = this.props
+    const { type, show, onClose, drawFromDeck, canBurn } = this.props
     // Render nothing if the "show" prop is false
     if (!show) {
       return null
@@ -37,6 +37,8 @@ class Modal extends React.Component {
         <div className="backdrop" style={backdropStyle}>
           <div className="modal" style={modalStyle}>
             <div className="footer">
+              {canBurn && <button onClick={onClose}>Burn</button>}
+              <button onClick={onClose}>Install</button>
               <button onClick={onClose}>Close</button>
             </div>
           </div>

@@ -13,12 +13,6 @@ const toCamelCase = str => {
   return cmlCase.join('')
 }
 
-// const Card = props => {
-//   const { card } = props
-//   return <img alt={`${card.name}`} src={`/img/${toCamelCase(card.name)}.png`} />
-// }
-// export default Card
-
 class Card extends Component {
   constructor(props) {
     super(props)
@@ -40,7 +34,12 @@ class Card extends Component {
           src={`/img/${toCamelCase(card.name)}.png`}
           onClick={this.toggleModal}
         />
-        <Modal show={this.state.isOpen} onClose={this.toggleModal} type={'card'}>
+        <Modal
+          show={this.state.isOpen}
+          onClose={this.toggleModal}
+          type={'card'}
+          canBurn={card.type === 'Bronze' && card.name !== 'Nova'}
+        >
           Some content for the modal
         </Modal>
       </div>
